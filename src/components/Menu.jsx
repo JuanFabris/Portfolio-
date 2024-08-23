@@ -20,7 +20,8 @@ export const Menu = (props) => {
           <div
             className={`bg-white h-0.5 rounded-md w-full transition-all ${
               menuOpened ? "-rotate-45" : ""
-            }`}
+            }`} 
+            
           />
         </button>
         <div

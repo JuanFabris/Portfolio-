@@ -25,31 +25,32 @@ export function Avatar(props) {
   const { animations: walk } = useFBX('./animations/Stop Walking.fbx');
 
   type[0].name = "Type";
-  standUp[0].name = "StandUp";
-  greet[0].name = "greet";
-  lift[0].name = "lift";
-  walk[0].name = "walk";
+  // standUp[0].name = "StandUp";
+  // greet[0].name = "greet";
+  // lift[0].name = "lift";
+  // walk[0].name = "walk";
 
-  const { actions, mixer } = useAnimations([type[0], standUp[0], greet[0], walk[0], lift[0]], group);
+  //const { actions, mixer } = useAnimations([type[0], standUp[0], greet[0], walk[0], lift[0]], group);
+  const { actions, mixer } = useAnimations([type[0]], group);
 
-  useFrame((state) => {
-    const { camera, pointer } = state;
+  // useFrame((state) => {
+  //   const { camera, pointer } = state;
 
-    if (headFollow) {
-      const head = group.current.getObjectByName('Head');
-      if (head) {
-        head.lookAt(camera.position);
-      }
-    }
+  //   if (headFollow) {
+  //     const head = group.current.getObjectByName('Head');
+  //     if (head) {
+  //       head.lookAt(camera.position);
+  //     }
+  //   }
 
-    if (cursorFollow) {
-      const spine = group.current.getObjectByName('Spine');
-      if (spine) {
-        const target = new THREE.Vector3(pointer.x, pointer.y, 1);
-        spine.lookAt(target);
-      }
-    }
-  });
+  //   if (cursorFollow) {
+  //     const spine = group.current.getObjectByName('Spine');
+  //     if (spine) {
+  //       const target = new THREE.Vector3(pointer.x, pointer.y, 1);
+  //       spine.lookAt(target);
+  //     }
+  //   }
+  // });
 
 // useEffect(() => {
 //   const { walk, lift } = actions;
@@ -77,13 +78,19 @@ export function Avatar(props) {
 //   };
 // }, [animation, actions, mixer]);
 
-  useEffect(() => {
-    actions[animation].reset().fadeIn(0.5).play();
-    return () => {
-      actions[animation].reset().fadeOut(0.5);
-    };
-  }, [animation]);
-
+useEffect(() => {
+  const action = actions[animation];
+  if (action) {
+    action.reset().fadeIn(0).play();
+  }
+  
+  return () => {
+    // Only clean up if the component is unmounting, not on every render
+    if (action) {
+      action.fadeOut(0.5);
+    }
+  };
+}, [animation, actions]);
 
   useEffect(() => {
     Object.values(materials).forEach((material) => {

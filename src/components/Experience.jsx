@@ -58,8 +58,8 @@ export const Experience = (props) => {
   
   const {animation} = useControls({
     animation : {
-      value : "Greet", //default
-      options : ["Greet", "Shake", "Pointing"]
+      value : "Type", //default
+      options : ["StandUp", "Type", "greet", "lift", "walk"]
     }
   })
 

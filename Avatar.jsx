@@ -1,39 +1,41 @@
 import * as THREE from 'three';
 import React, { useEffect, useRef } from 'react';
-import { useFrame, useGraph } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import { useAnimations, useGLTF } from '@react-three/drei';
 import { SkeletonUtils } from 'three-stdlib';
 import { useFBX } from '@react-three/drei';
 import { useControls } from 'leva';
+import { useGraph } from '@react-three/fiber';
 
 export function Avatar(props) {
-  const { animation } = props;
-
-  const { headFollows, cursorFollow, wireframe } = useControls({
-    headFollows: false,
+  const { animation, wireframe } = props;
+  const { headFollow, cursorFollow } = useControls({
+    headFollow: false,
     cursorFollow: false,
-    wireframe: false,
   });
-
   const group = useRef();
   const { scene } = useGLTF('./models/Avatar.glb');
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = useGraph(clone);
 
-  const { animations: pointingAnimation } = useFBX('./animations/KneelingPointing.fbx');
-  const { animations: greeting } = useFBX('./animations/StandingGreeting.fbx');
-  const { animations: shake } = useFBX('./animations/ShakingHands.fbx');
+  const { animations: type } = useFBX('./animations/Typing.fbx');
+  const { animations: standUp } = useFBX('./animations/Stand Up (1).fbx');
+  const { animations: greet } = useFBX('./animations/KneelingPointing.fbx');
+  const { animations: lift } = useFBX('./animations/Lifting.fbx');
+  const { animations: walk } = useFBX('./animations/Stop Walking.fbx');
 
-  pointingAnimation[0].name = 'Pointing';
-  greeting[0].name = 'Greet';
-  shake[0].name = 'Shake';
+  type[0].name = "Type";
+  standUp[0].name = "StandUp";
+  greet[0].name = "greet";
+  lift[0].name = "lift";
+  walk[0].name = "walk";
 
-  const { actions } = useAnimations([pointingAnimation[0], greeting[0], shake[0]], group);
+  const { actions, mixer } = useAnimations([type[0], standUp[0], greet[0], walk[0], lift[0]], group);
 
   useFrame((state) => {
     const { camera, pointer } = state;
 
-    if (headFollows) {
+    if (headFollow) {
       const head = group.current.getObjectByName('Head');
       if (head) {
         head.lookAt(camera.position);
@@ -47,19 +49,41 @@ export function Avatar(props) {
         spine.lookAt(target);
       }
     }
-
   });
 
+// useEffect(() => {
+//   const { walk, lift } = actions;
+
+//   // Stop any other actions that might be playing
+//   mixer.stopAllAction();
+
+//   // Start the first animation
+//   const walkAction = walk.play()
+
+//   // Blend to the second animation
+//   const liftAction = lift.play();
+
+//   // Set up the blending duration between the animations
+//   liftAction.crossFadeFrom(walkAction, 1, true);
+
+//   // Optionally: handle animation looping
+//   walkAction.setLoop(THREE.LoopOnce, 1); // Play 'walk' animation only once
+//   liftAction.setLoop(THREE.LoopOnce, 1); // Play 'lift' animation only once
+
+//   // Clean up: stop actions when the component unmounts or dependencies change
+//   return () => {
+//     walkAction.stop();
+//     liftAction.stop();
+//   };
+// }, [animation, actions, mixer]);
+
   useEffect(() => {
-    if (actions[animation]) {
-      actions[animation].reset().fadeIn(0.5).play();
-    }
+    actions[animation].reset().fadeIn(0.5).play();
     return () => {
-      if (actions[animation]) {
-        actions[animation].reset().fadeOut(0.5);
-      }
+      actions[animation].reset().fadeOut(0.5);
     };
-  }, [animation, actions]);
+  }, [animation]);
+
 
   useEffect(() => {
     Object.values(materials).forEach((material) => {

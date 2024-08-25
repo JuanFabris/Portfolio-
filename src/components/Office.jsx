@@ -11,44 +11,41 @@ export function Office(props) {
   const {section} = props
   const { nodes, materials } = useGLTF('./models/Office.glb')
 
+
   return (
     <group {...props} dispose={null}>
       <group position={[22.743, 0, 313.535]} scale={50}>
+
+        {/* Monitors */}
         <group position={[-0.294, 1.285, -6.337]} rotation={[-Math.PI / 2, 0, 0]} scale={30.19}>
           <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group112678593|Dupli|5'].geometry} material={materials['mat22.001']} />
           <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group1219313228|Dupli|2'].geometry} material={materials['mat22.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group1462626064|Dupli|7'].geometry} material={materials['mat22.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group1658787459|Dupli|18'].geometry} material={materials['mat22.001']} position={[0, 0, -0.005]} />
+          
+          {/* left screen */}
           <group position={[0, 0, -0.005]}>
             <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group1691283673|Dupli|23001'].geometry} material={materials['mat22.001']} />
             <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group1691283673|Dupli|23001_1'].geometry} material={materials['mat23.001']} />
             <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group1691283673|Dupli|23001_2'].geometry} material={materials['mat21.001']} />
           </group>
           
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group1698824667|Dupli|12'].geometry} material={materials['mat22.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group1746518091|Dupli|8'].geometry} material={materials['mat23.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group1783798096|Dupli|3'].geometry} material={materials['mat23.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group1896072715|Dupli|19'].geometry} material={materials['mat22.001']} position={[0, 0, -0.005]} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group2060347243|Dupli|9'].geometry} material={materials['mat22.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group2063576334|Dupli|11'].geometry} material={materials['mat22.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group2070617275|Dupli|13'].geometry} material={materials['mat23.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group2128326706|Dupli|16'].geometry} material={materials['mat23.001']} position={[0, 0, -0.005]} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group451364077|Dupli|20'].geometry} material={materials['mat22.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group575146565|Dupli|6'].geometry} material={materials['mat22.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group625259463|Dupli|4'].geometry} material={materials['mat23.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group710626981|Dupli|14'].geometry} material={materials['mat22.001']} />
-          <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group786212531|Dupli|21'].geometry} material={materials['mat22.001']} />
+          {/* right screen */}
           <group position={[0, 0, -0.005]}>
             <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group860618825|Dupli|22001'].geometry} material={materials['mat22.001']} />
             <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group860618825|Dupli|22001_1'].geometry} material={materials['mat23.001']} />
             <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group860618825|Dupli|22001_2'].geometry} material={materials['mat21.001']} />
           </group>
+
+
           <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group929043094|Dupli|10'].geometry} material={materials['mat22.001']} />
           <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group329542522|Dupli|001'].geometry} material={materials['mat22.001']} />
           <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group329542522|Dupli|001_1'].geometry} material={materials['mat23.001']} />
           <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group576947092|Dupli|1001'].geometry} material={materials['mat22.001']} />
           <mesh geometry={nodes['Dual_Monitors_on_sit-stand_arm|group576947092|Dupli|1001_1'].geometry} material={materials['mat23.001']} />
+
         </group>
+
+
+
         <group position={[-0.805, 0.862, -6.105]} rotation={[-Math.PI / 2, 0, 0]} scale={129.646}>
           <mesh geometry={nodes['Mug_With_Office_Tool|Mug_with_office_tools|Dupli|'].geometry} material={materials['Material.002']} scale={100} />
         </group>
@@ -76,7 +73,7 @@ export function Office(props) {
           <mesh geometry={nodes.Desk001_3.geometry} material={materials['BlackPlastic.002']} />
           <mesh geometry={nodes.Desk001_4.geometry} material={materials['BlackWood.002']} />
         </group>
-        <mesh geometry={nodes.Mousepad001.geometry} material={materials['Mousepad.001']} position={[-0.715, 0.869, -6.591]} rotation={[-Math.PI / 2, 0, Math.PI / 2]} scale={[11.764, 14.321, 0.156]} />
+       
         <group position={[0.338, 0.935, -6.188]} rotation={[0, 0.144, Math.PI]} scale={781.608}>
           <mesh geometry={nodes.Office_Phone002.geometry} material={materials['Light grey.001']} />
           <mesh geometry={nodes.Office_Phone002_1.geometry} material={materials['Grey Plastic.001']} />
@@ -87,9 +84,7 @@ export function Office(props) {
       <group position={[-23.533, 15.731, -61.313]} scale={30.46}>
         <mesh geometry={nodes.ExecutiveChair1.geometry} material={materials.LeatherExecutiveChair1} position={[1.106, 0, 0.524]} rotation={[-Math.PI / 2, 0, 0]} scale={156.384} />
       </group>
-      <group position={[-16.221, 83.155, -85.371]} scale={-32.676}>
-        <mesh geometry={nodes.Mouse.geometry} material={materials['Material.004']} position={[-0.186, 1.223, -2.15]} rotation={[0.012, 0.033, -3.122]} scale={274.067} />
-      </group>
+      
       <group position={[-27.212, 19.094, -9.505]} rotation={[0, -1.555, 0]} scale={17.475}>
         <mesh geometry={nodes.mesh549538436.geometry} material={materials['mat23.002']} />
         <mesh geometry={nodes.mesh549538436_1.geometry} material={materials['mat8.001']} />

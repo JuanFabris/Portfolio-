@@ -1,174 +1,142 @@
-import * as THREE from 'three';
-import React, { useEffect, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import React, { forwardRef, useRef, useEffect } from 'react';
 import { useAnimations, useGLTF } from '@react-three/drei';
 import { SkeletonUtils } from 'three-stdlib';
 import { useFBX } from '@react-three/drei';
-import { useControls } from 'leva';
 import { useGraph } from '@react-three/fiber';
+import * as THREE from 'three';
 
-export function Avatar(props) {
-  const { animation, wireframe } = props;
-  const { headFollow, cursorFollow } = useControls({
-    headFollow: false,
-    cursorFollow: false,
-  });
-  const group = useRef();
-  const { scene } = useGLTF('./models/Avatar.glb');
-  const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
-  const { nodes, materials } = useGraph(clone);
+export const Avatar = forwardRef((props, ref) => {
+    const { animation } = props; 
+    const group = useRef();
+    const { scene } = useGLTF('./models/Avatar.glb');
+    const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
+    const { nodes, materials } = useGraph(clone);
+    
+    // Load animations
+    const { animations: type } = useFBX('./animations/Typing.fbx');
+    const { animations: lift } = useFBX('./animations/Lifting.fbx');
+    const { animations: walk } = useFBX('./animations/Stop Walking.fbx');
 
-  const { animations: type } = useFBX('./animations/Typing.fbx');
-  const { animations: standUp } = useFBX('./animations/Stand Up (1).fbx');
-  const { animations: greet } = useFBX('./animations/KneelingPointing.fbx');
-  const { animations: lift } = useFBX('./animations/Lifting.fbx');
-  const { animations: walk } = useFBX('./animations/Stop Walking.fbx');
+    type[0].name = "Type";
+    walk[0].name = "Walk";
+    lift[0].name = "Lift";
 
-  type[0].name = "Type";
-  // standUp[0].name = "StandUp";
-  // greet[0].name = "greet";
-  // lift[0].name = "lift";
-  // walk[0].name = "walk";
+    const { actions, mixer } = useAnimations([type[0], walk[0], lift[0]], group);
 
-  //const { actions, mixer } = useAnimations([type[0], standUp[0], greet[0], walk[0], lift[0]], group);
-  const { actions, mixer } = useAnimations([type[0]], group);
 
-  // useFrame((state) => {
-  //   const { camera, pointer } = state;
+    useEffect(() => {
+      const action = actions[animation];
 
-  //   if (headFollow) {
-  //     const head = group.current.getObjectByName('Head');
-  //     if (head) {
-  //       head.lookAt(camera.position);
-  //     }
-  //   }
+      // Reset and play the specified animation
+      action.reset().fadeIn(0.5).play();
 
-  //   if (cursorFollow) {
-  //     const spine = group.current.getObjectByName('Spine');
-  //     if (spine) {
-  //       const target = new THREE.Vector3(pointer.x, pointer.y, 1);
-  //       spine.lookAt(target);
-  //     }
-  //   }
-  // });
+      if (animation === "Walk") {
+          action.setLoop(THREE.LoopOnce); // Play walk once
+          action.clampWhenFinished = true; // Clamp at the last frame
+          
+          // Listen for when the walk action finishes
+          mixer.addEventListener('finished', () => {
+              // Hold the avatar's position by setting time to the last frame
+              action.time = action.getClip().duration; // Go to the last frame
+              action.stop(); // Stop walking animation
 
-// useEffect(() => {
-//   const { walk, lift } = actions;
+              // Play the lift animation
+              const liftAction = actions["Lift"];
+              liftAction.reset().fadeIn(0.5).play();
+              liftAction.setLoop(THREE.LoopOnce); // Play lift once
+              liftAction.clampWhenFinished = true; // Clamp at the last frame
+              
+              // Ensure the lift animation stops at the last frame
+              mixer.addEventListener('finished', () => {
+                  liftAction.stop(); // Stop the lift action
+                  liftAction.time = liftAction.getClip().duration; // Stay at the last frame
+              });
+          });
+      } else if (animation === "Type") {
+          action.setLoop(THREE.LoopRepeat); // Keep typing indefinitely
+      }
 
-//   // Stop any other actions that might be playing
-//   mixer.stopAllAction();
+      // Cleanup function to remove event listeners
+      return () => {
+          mixer.removeEventListener('finished', () => {});
+          action.fadeOut(0.5);
+      };
+  }, [animation, actions, mixer]);
 
-//   // Start the first animation
-//   const walkAction = walk.play()
 
-//   // Blend to the second animation
-//   const liftAction = lift.play();
-
-//   // Set up the blending duration between the animations
-//   liftAction.crossFadeFrom(walkAction, 1, true);
-
-//   // Optionally: handle animation looping
-//   walkAction.setLoop(THREE.LoopOnce, 1); // Play 'walk' animation only once
-//   liftAction.setLoop(THREE.LoopOnce, 1); // Play 'lift' animation only once
-
-//   // Clean up: stop actions when the component unmounts or dependencies change
-//   return () => {
-//     walkAction.stop();
-//     liftAction.stop();
-//   };
-// }, [animation, actions, mixer]);
-
-useEffect(() => {
-  const action = actions[animation];
-  if (action) {
-    action.reset().fadeIn(0).play();
-  }
-  
-  return () => {
-    // Only clean up if the component is unmounting, not on every render
-    if (action) {
-      action.fadeOut(0.5);
-    }
-  };
-}, [animation, actions]);
-
-  useEffect(() => {
-    Object.values(materials).forEach((material) => {
-      material.wireframe = wireframe;
-    });
-  }, [wireframe, materials]);
-
-  return (
-    <group {...props} ref={group} dispose={null}>
-      <primitive object={nodes.Hips} />
-      <skinnedMesh
-        geometry={nodes.Wolf3D_Hair.geometry}
-        material={materials.Wolf3D_Hair}
-        skeleton={nodes.Wolf3D_Hair.skeleton}
-        frustumCulled={false}
-      />
-      <skinnedMesh
-        geometry={nodes.Wolf3D_Body.geometry}
-        material={materials.Wolf3D_Body}
-        skeleton={nodes.Wolf3D_Body.skeleton}
-        frustumCulled={false}
-      />
-      <skinnedMesh
-        geometry={nodes.Wolf3D_Outfit_Bottom.geometry}
-        material={materials.Wolf3D_Outfit_Bottom}
-        skeleton={nodes.Wolf3D_Outfit_Bottom.skeleton}
-        frustumCulled={false}
-      />
-      <skinnedMesh
-        geometry={nodes.Wolf3D_Outfit_Footwear.geometry}
-        material={materials.Wolf3D_Outfit_Footwear}
-        skeleton={nodes.Wolf3D_Outfit_Footwear.skeleton}
-        frustumCulled={false}
-      />
-      <skinnedMesh
-        geometry={nodes.Wolf3D_Outfit_Top.geometry}
-        material={materials.Wolf3D_Outfit_Top}
-        skeleton={nodes.Wolf3D_Outfit_Top.skeleton}
-        frustumCulled={false}
-      />
-      <skinnedMesh
-        name="EyeLeft"
-        geometry={nodes.EyeLeft.geometry}
-        material={materials.Wolf3D_Eye}
-        skeleton={nodes.EyeLeft.skeleton}
-        morphTargetDictionary={nodes.EyeLeft.morphTargetDictionary}
-        morphTargetInfluences={nodes.EyeLeft.morphTargetInfluences}
-        frustumCulled={false}
-      />
-      <skinnedMesh
-        name="EyeRight"
-        geometry={nodes.EyeRight.geometry}
-        material={materials.Wolf3D_Eye}
-        skeleton={nodes.EyeRight.skeleton}
-        morphTargetDictionary={nodes.EyeRight.morphTargetDictionary}
-        morphTargetInfluences={nodes.EyeRight.morphTargetInfluences}
-        frustumCulled={false}
-      />
-      <skinnedMesh
-        name="Wolf3D_Head"
-        geometry={nodes.Wolf3D_Head.geometry}
-        material={materials.Wolf3D_Skin}
-        skeleton={nodes.Wolf3D_Head.skeleton}
-        morphTargetDictionary={nodes.Wolf3D_Head.morphTargetDictionary}
-        morphTargetInfluences={nodes.Wolf3D_Head.morphTargetInfluences}
-        frustumCulled={false}
-      />
-      <skinnedMesh
-        name="Wolf3D_Teeth"
-        geometry={nodes.Wolf3D_Teeth.geometry}
-        material={materials.Wolf3D_Teeth}
-        skeleton={nodes.Wolf3D_Teeth.skeleton}
-        morphTargetDictionary={nodes.Wolf3D_Teeth.morphTargetDictionary}
-        morphTargetInfluences={nodes.Wolf3D_Teeth.morphTargetInfluences}
-        frustumCulled={false}
-      />
-    </group>
-  );
-}
+    return (
+        <group {...props} ref={group} dispose={null}>
+            <primitive object={nodes.Hips} />
+            {/* Skinned Meshes */}
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Hair.geometry}
+                material={materials.Wolf3D_Hair}
+                skeleton={nodes.Wolf3D_Hair.skeleton}
+                frustumCulled={false}
+            />
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Body.geometry}
+                material={materials.Wolf3D_Body}
+                skeleton={nodes.Wolf3D_Body.skeleton}
+                frustumCulled={false}
+            />
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Outfit_Bottom.geometry}
+                material={materials.Wolf3D_Outfit_Bottom}
+                skeleton={nodes.Wolf3D_Outfit_Bottom.skeleton}
+                frustumCulled={false}
+            />
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Outfit_Footwear.geometry}
+                material={materials.Wolf3D_Outfit_Footwear}
+                skeleton={nodes.Wolf3D_Outfit_Footwear.skeleton}
+                frustumCulled={false}
+            />
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Outfit_Top.geometry}
+                material={materials.Wolf3D_Outfit_Top}
+                skeleton={nodes.Wolf3D_Outfit_Top.skeleton}
+                frustumCulled={false}
+            />
+            <skinnedMesh
+                name="EyeLeft"
+                geometry={nodes.EyeLeft.geometry}
+                material={materials.Wolf3D_Eye}
+                skeleton={nodes.EyeLeft.skeleton}
+                morphTargetDictionary={nodes.EyeLeft.morphTargetDictionary}
+                morphTargetInfluences={nodes.EyeLeft.morphTargetInfluences}
+                frustumCulled={false}
+            />
+            <skinnedMesh
+                name="EyeRight"
+                geometry={nodes.EyeRight.geometry}
+                material={materials.Wolf3D_Eye}
+                skeleton={nodes.EyeRight.skeleton}
+                morphTargetDictionary={nodes.EyeRight.morphTargetDictionary}
+                morphTargetInfluences={nodes.EyeRight.morphTargetInfluences}
+                frustumCulled={false}
+            />
+            <skinnedMesh
+                name="Wolf3D_Head"
+                geometry={nodes.Wolf3D_Head.geometry}
+                material={materials.Wolf3D_Skin}
+                skeleton={nodes.Wolf3D_Head.skeleton}
+                morphTargetDictionary={nodes.Wolf3D_Head.morphTargetDictionary}
+                morphTargetInfluences={nodes.Wolf3D_Head.morphTargetInfluences}
+                frustumCulled={false}
+            />
+            <skinnedMesh
+                name="Wolf3D_Teeth"
+                geometry={nodes.Wolf3D_Teeth.geometry}
+                material={materials.Wolf3D_Teeth}
+                skeleton={nodes.Wolf3D_Teeth.skeleton}
+                morphTargetDictionary={nodes.Wolf3D_Teeth.morphTargetDictionary}
+                morphTargetInfluences={nodes.Wolf3D_Teeth.morphTargetInfluences}
+                frustumCulled={false}
+            />
+        </group>
+    );
+});
 
 useGLTF.preload('./models/Avatar.glb');
+

@@ -1,5 +1,6 @@
 import React from 'react'
 import {motion} from 'framer-motion'
+import { Avatar } from './Avatar';
 
 //HTML COMPONENTS
 
@@ -112,6 +113,7 @@ const Lenguages = [
 const SkillsSection = () => {
     return (
         <Section>
+            
           <motion.div whileInView={"visible"}>
                 <h2 className='text-5xl font-bold'>Skills</h2>
                 <div className='mt-8 space-y-4'>

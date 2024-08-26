@@ -5,69 +5,84 @@ import { useFBX } from '@react-three/drei';
 import { useGraph } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export const Avatar = forwardRef((props, ref) => {
-    const { animation } = props; 
+export const Avatar = forwardRef(({ animation, onAnimationEnd, position, ...props }, ref) => {
     const group = useRef();
     const { scene } = useGLTF('./models/Avatar.glb');
     const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
     const { nodes, materials } = useGraph(clone);
-    
+
     // Load animations
     const { animations: type } = useFBX('./animations/Typing.fbx');
     const { animations: lift } = useFBX('./animations/Lifting.fbx');
     const { animations: walk } = useFBX('./animations/Stop Walking.fbx');
+    const { animations: fallFlat } = useFBX('./animations/Falling Flat Impact.fbx');
+    const { animations: getup } = useFBX('./animations/Getting Up.fbx');
+    const { animations: fall } = useFBX('./animations/Falling.fbx');
 
     type[0].name = "Type";
     walk[0].name = "Walk";
     lift[0].name = "Lift";
+    fallFlat[0].name = "FallF";
+    getup[0].name = "Getup";
+    fall[0].name = "Fall";
 
-    const { actions, mixer } = useAnimations([type[0], walk[0], lift[0]], group);
-
+    const { actions, mixer } = useAnimations([type[0], walk[0], lift[0], fall[0], getup[0], fallFlat[0]], group);
 
     useEffect(() => {
-      const action = actions[animation];
 
-      // Reset and play the specified animation
-      action.reset().fadeIn(0.5).play();
+        if(animation === "Type") {
+            const typeAct = actions["Type"];
+            typeAct.reset().fadeIn(0).play()
+        }
+        // Start the animation sequence based on the selected animation
+        const startAnimationSequence = () => {
+            if (animation === "FallF") {
+                //playAnimation("Fall", () => {
+                    playAnimation("FallF", () => {
+                        playAnimation("Getup", () => {
+                            playAnimation("Walk", () => {
+                                playAnimation("Lift", onAnimationEnd);
+                            });
+                        });
+                    });
+                //});
+            }
+        };
 
-      if (animation === "Walk") {
-          action.setLoop(THREE.LoopOnce); // Play walk once
-          action.clampWhenFinished = true; // Clamp at the last frame
-          
-          // Listen for when the walk action finishes
-          mixer.addEventListener('finished', () => {
-              // Hold the avatar's position by setting time to the last frame
-              action.time = action.getClip().duration; // Go to the last frame
-              action.stop(); // Stop walking animation
+        const playAnimation = (animName, callback) => {
+            const action = actions[animName];
+            action.reset().fadeIn(0.1).play();
+            action.clampWhenFinished = true;
+            action.setLoop(THREE.LoopOnce);
 
-              // Play the lift animation
-              const liftAction = actions["Lift"];
-              liftAction.reset().fadeIn(0.5).play();
-              liftAction.setLoop(THREE.LoopOnce); // Play lift once
-              liftAction.clampWhenFinished = true; // Clamp at the last frame
-              
-              // Ensure the lift animation stops at the last frame
-              mixer.addEventListener('finished', () => {
-                  liftAction.stop(); // Stop the lift action
-                  liftAction.time = liftAction.getClip().duration; // Stay at the last frame
-              });
-          });
-      } else if (animation === "Type") {
-          action.setLoop(THREE.LoopRepeat); // Keep typing indefinitely
-      }
+            // Event listener for when the animation finishes
+            const onFinished = () => {
+                if (callback) callback();
+                mixer.removeEventListener('finished', onFinished); // Clean up listener after it finishes
+            };
 
-      // Cleanup function to remove event listeners
-      return () => {
-          mixer.removeEventListener('finished', () => {});
-          action.fadeOut(0.5);
-      };
-  }, [animation, actions, mixer]);
+            mixer.addEventListener('finished', onFinished);
+        };
 
+        startAnimationSequence();
+
+        return () => {
+            // Clean up all event listeners on component unmount
+            mixer.removeEventListener('finished', () => {});
+        };
+    }, [actions, animation, mixer, onAnimationEnd]);
+
+    // Apply the position prop to the group
+    useEffect(() => {
+        if (group.current) {
+            group.current.position.set(...position);
+        }
+    }, [position]);
 
     return (
         <group {...props} ref={group} dispose={null}>
             <primitive object={nodes.Hips} />
-            {/* Skinned Meshes */}
+            {/* Render skinned meshes */}
             <skinnedMesh
                 geometry={nodes.Wolf3D_Hair.geometry}
                 material={materials.Wolf3D_Hair}
@@ -139,4 +154,3 @@ export const Avatar = forwardRef((props, ref) => {
 });
 
 useGLTF.preload('./models/Avatar.glb');
-

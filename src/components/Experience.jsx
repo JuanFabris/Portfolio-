@@ -8,51 +8,58 @@ export const Experience = (props) => {
     const { section } = props; 
     const avatarRef = useRef(); 
     const [animation, setAnimation] = useState("Type");
-    const [avatarPosition, setAvatarPosition] = useState([10, 5, -50]); // Initial position for avatar
+    const [avatarPosition, setAvatarPosition] = useState([10, 5, -50]);
     const [rotation, setRotation] = useState([0, 0, 0]);
-    const targetPosition = useRef([-80, -320, -50]); // Target position when section is 1
+    const targetPosition = useRef([-80, -320, -50]);
+    const animationTriggered = useRef(false);
 
     useEffect(() => {
-        if (section === 1) {
-            setAnimation("FallF"); // Trigger fall animation
-            setRotation([0, 3.2, 0]); // Adjust rotation during fall
-        } else {
+        if (section === 1 && !animationTriggered.current) {
+            setAnimation("Land");
+            setRotation([0, 3.2, 0]);
+            moveAvatarToTarget();
+            animationTriggered.current = true;
+        } else if (section === 0) {
             setAnimation("Type");
-            setRotation([0, 0, 0]); // Reset rotation when typing
-            setAvatarPosition([10, 5, -50]); // Reset position when typing
+            setRotation([0, 0, 0]);
+            setAvatarPosition([10, 5, -50]);
+            animationTriggered.current = false;
         }
     }, [section]);
-
-    // Smooth transition to the target position
-    useEffect(() => {
+    
+    const moveAvatarToTarget = () => {
         const startPosition = new THREE.Vector3(...avatarPosition);
         const endPosition = new THREE.Vector3(...targetPosition.current);
-        const duration = 0.2; // Duration of the transition in seconds
+        const duration = 0.1;
         const startTime = performance.now();
-
+    
+        const easeOutQuad = (t) => t * (2 - t); //easing function
+    
         const animate = (time) => {
-            const elapsed = (time - startTime) / 1000; // Convert milliseconds to seconds
-            const progress = Math.min(elapsed / duration, 1); // Clamp progress to [0, 1]
-
+            const elapsed = (time - startTime) / 1000;
+            const progress = Math.min(elapsed / duration, 1);
+    
+            //apply ease
+            const easedProgress = easeOutQuad(progress);
+    
             // Calculate current position
-            const currentPosition = startPosition.lerp(endPosition, progress);
+            const currentPosition = startPosition.lerp(endPosition, easedProgress);
             setAvatarPosition(currentPosition.toArray());
-
+    
             // Continue the animation until it reaches the end
             if (progress < 1) {
                 requestAnimationFrame(animate);
             }
         };
-
-        // Only trigger the animation when the animation is set to "FallF"
-        if (animation === "FallF") {
-            requestAnimationFrame(animate);
-        }
-    }, [animation]);
-
+    
+        // Start the movement animation
+        requestAnimationFrame(animate);
+    };
+    
     const handleAnimationEnd = () => {
         console.log("Animation ended.");
     };
+    
 
     return (
         <>

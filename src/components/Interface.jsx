@@ -1,6 +1,8 @@
 import React from 'react'
 import {motion} from 'framer-motion'
 import { Avatar } from './Avatar';
+import gsap from "https://cdn.skypack.dev/gsap@3.5.1";
+import { useRef, useEffect } from 'react';
 
 //HTML COMPONENTS
 
@@ -31,46 +33,148 @@ const Section = (props) => {
 }
 
 const AboutSection = () => {
+    const nameRef = useRef(null);
+    const name = "Gianluigi Lucca Fabris"; // The name to reveal
+
+    useEffect(() => {
+        // Function to reveal the letters of the name
+        const revealTextEffect = (el) => {
+            const textElements = createTextElements(el.textContent);
+            setInnerElements(el, textElements);
+            const animation = createAnimation(el);
+            animation.play();
+        };
+
+        const createTextElements = (str) => {
+            const words = str.split(" ");
+            const wordElements = words.map(createWordElement);
+            wordElements.forEach((wordElement) => {
+                const letters = wordElement.textContent.split("");
+                const letterElements = letters.map(createLetterElement);
+                setInnerElements(wordElement, letterElements);
+            });
+            return wordElements;
+        };
+
+        const createWordElement = (word) => {
+            const nonBreakingSpace = String.fromCharCode(160);
+            return createTextElement({
+                text: word + nonBreakingSpace,
+                className: "word"
+            });
+        };
+
+        const createLetterElement = (letter) => {
+            return createTextElement({
+                text: letter,
+                className: "letter"
+            });
+        };
+
+        const createTextElement = ({ text, className }) => {
+            const el = document.createElement("span");
+            el.style.display = "inline-block";
+            el.innerHTML = text;
+            el.classList.add(className);
+            return el;
+        };
+
+        const setInnerElements = (el, elements) => {
+            el.innerHTML = "";
+            elements.forEach((element) => el.appendChild(element));
+        };
+
+        const createAnimation = (el) => {
+            const animation = gsap.timeline();
+            const words = [...el.querySelectorAll(".word")];
+            const tweens = words.map(createWordTween);
+            animation.add(tweens);
+            animation.pause();
+            el.classList.add("animation-initialized");
+            return animation;
+        };
+
+        const createWordTween = (el, index) => {
+            const letters = [...el.querySelectorAll(".letter")];
+            const delay = index * 0.18; // Delay based on word index
+            return gsap.fromTo(
+                letters,
+                {
+                    opacity: 0,
+                    xPercent: -50,
+                },
+                {
+                    opacity: 1,
+                    xPercent: 0,
+                    ease: "power4.out",
+                    duration: 1,
+                    stagger: 0.1,
+                    delay,
+                }
+            );
+        };
+
+        // Timeout to reveal the name after 1 second
+        const timeoutId = setTimeout(() => {
+            if (nameRef.current) {
+                nameRef.current.style.opacity = 1; // Make the name visible
+                revealTextEffect(nameRef.current); // Start the reveal effect
+            }
+        }, 1000); // 1000 milliseconds = 1 second
+
+        // Clean up the timeout if the component unmounts
+        return () => clearTimeout(timeoutId);
+    }, []);
+
     return (
         <Section>
-            <h1 className='text-6xl font-extrabold leading-snug'>
+            <h1 className='text-6xl font-extrabold leading-snug text-gray-200'>
                 Hi, I'm
                 <br />
-                <span className='bg-white px-1 italic'>Gianluigi Lucca Fabris</span>
+                <span 
+                    ref={nameRef} 
+                    className='italic text-white opacity-0' // Initially hidden
+                    style={{ transition: 'opacity 0.5s ease-in' }} // Smooth transition for visibility
+                >
+                    {name}
+                </span>
             </h1>
-            <motion.p className='text-lg text-gray-600 mt-4'
-            initial = {{
-                opacity : 0,
-                y : 25
-            }}
-            whileInView={{
-                opacity : 1,
-                y : 0,
-                transition : {
-                    duration : 1,
-                    delay : 1.3
-                }
-            }}>
+            <motion.p className='text-lg text-gray-200 mt-4'
+                initial={{
+                    opacity: 0,
+                    y: 25
+                }}
+                whileInView={{
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                        duration: 1,
+                        delay: 1.3
+                    }
+                }}>
                 I'm a junior web developer aiming to
                 <br />
                 become a Full Stack software engineer
             </motion.p>
             <motion.button className='bg-blue-600 rounded-lg text-white p-3 mt-5 font-bold text-2xl'
-            initial = {{
-                opacity : 0,
-                y : 20
-            }}
-            whileInView={{
-                opacity : 1,
-                y : 0,
-                transition : {
-                    duration : 1,
-                    delay : 1.8
-                }
-            }}>Contact Me</motion.button>
+                initial={{
+                    opacity: 0,
+                    y: 20
+                }}
+                whileInView={{
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                        duration: 1,
+                        delay: 1.8
+                    }
+                }}>
+                Contact Me
+            </motion.button>
         </Section>
     );
-}
+};
+
 
 const Skills = [
     {
@@ -115,11 +219,11 @@ const SkillsSection = () => {
         <Section>
             
           <motion.div whileInView={"visible"}>
-                <h2 className='text-5xl font-bold'>Skills</h2>
+                <h2 className='text-5xl font-bold  text-gray-200'>Skills</h2>
                 <div className='mt-8 space-y-4'>
                     {Skills.map((skill, index) => 
                         <div className='w-64' key={index}>
-                            <motion.h3 className='text-xl font-bold text-gray-800'
+                            <motion.h3 className='text-xl font-bold text-gray-200'
                             initial = {{
                                 opacity : 0,
                             }}
@@ -133,7 +237,7 @@ const SkillsSection = () => {
                                 }
                             }}
                             >{skill.title}</motion.h3>
-                            <div className='h-2 w-full bg-gray-400 rounded-full mt-2'>
+                            <div className='h-2 w-full bg-gray-200 rounded-full mt-2'>
                                 <motion.div className='h-full bg-indigo-500 rounded-full border-x-black' 
                                      style={{ width: `${skill.level}%` }}
                                     initial = {{
@@ -157,11 +261,11 @@ const SkillsSection = () => {
                 </div>
             </motion.div>
           <motion.div whileInView={'visible'}>
-                <h2 className='text-5xl font-bold mt-16'>Lenguages</h2>
+                <h2 className='text-5xl font-bold mt-16  text-gray-200'>Lenguages</h2>
                 <div className='mt-8 space-y-4'>
                     {Lenguages.map((lenguage, index) => 
                         <div className='w-64' key={index}>
-                            <motion.h3 className='text-xl font-bold text-gray-800'
+                            <motion.h3 className='text-xl font-bold text-gray-200'
                             initial = {{
                                 opacity : 0,
                             }}
@@ -176,7 +280,7 @@ const SkillsSection = () => {
                                
                             }}
                             >{lenguage.title}</motion.h3>
-                            <div className='h-2 w-full bg-gray-400 rounded-full mt-2'>
+                            <div className='h-2 w-full bg-gray-200 rounded-full mt-2'>
                                 <motion.div className='h-full bg-indigo-500 rounded-full' 
                                     style={{ width: `${lenguage.level}%` }}
                                     initial = {{
@@ -234,7 +338,7 @@ const ContactSection = () => {
                     type='text'
                     name='message'
                     id='message'
-                    className='block w-full h-52 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-black-600'
+                    className='block w-full h-52 rounded-md border-0 text-gray-200 shadow-sm ring-1 ring-inset ring-black-600'
                     />
                     <button className='bg-blue-600 rounded-lg text-white p-3 mt-5 font-bold text-2xl'>
                         Submit

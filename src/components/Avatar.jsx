@@ -41,7 +41,7 @@ export const Avatar = forwardRef(({ animation, onAnimationEnd, position, ...prop
 
         const playAnimation = (animName, callback) => {
             const action = actions[animName];
-            action.reset().fadeIn(0.2).play();
+            action.reset().fadeIn(0.5).play();
             action.clampWhenFinished = true;
             action.setLoop(THREE.LoopOnce);
             handleAnimationEnd(callback);

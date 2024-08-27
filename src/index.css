@@ -11,7 +11,7 @@
     margin: 0;
   }
 
-  /* Loader styles */
+
 .loader {
   position: relative;
   width: 100px;
@@ -87,7 +87,9 @@
 }
 
 h3:hover {
-  color: #3B82F6; /* Change color on hover */
+  color:white;
+  translate: 10px;
+  transition : 0.5s
 }
 
 

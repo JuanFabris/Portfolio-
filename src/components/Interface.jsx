@@ -33,7 +33,21 @@ const Section = (props) => {
     );
 }
 
-const AboutSection = () => {
+export const Interface = (props) => {
+    const { setSection } = props;
+    return (
+        <>
+            <div className='flex flex-col items-center w-screen'>
+                <AboutSection setSection={setSection} />
+                <SkillsSection />
+                <ContactSection />
+            </div>
+        </>
+    );
+}
+
+const AboutSection = (props) => {
+    const { setSection } = props;
     const nameRef = useRef(null);
     const name = "Gianluigi Lucca Fabris";
 
@@ -155,6 +169,7 @@ const AboutSection = () => {
                 I hold a degree in Criminology and a Master’s in Cybersecurity, <br/>followed by a six-month coding program and R&D experience at HFarm. <br/> Currently, I consider myself as a Frontend Developer and have recently <br/> started studying backend development to transition into a Full Stack Developer role.
             </motion.p>
             <motion.button
+            onClick={() => setSection(2)}
   className="button2 bg-transparent rounded-lg text-white p-3 mt-5 font-bold text-2xl"
   style={{
     width: '11em',
@@ -214,7 +229,7 @@ const ProgressBar = ({ title, level, index }) => {
     return (
         <div className='relative w-80 group'>
             <motion.h3 
-                className='text-xl font-bold text-gray-200 mb-2 group-hover:text-indigo-500 transition-colors duration-300'
+                className='text-xl font-bold text-gray-200 mb-2 transition-colors duration-300'
                 initial={{ opacity: 0 }}
                 whileInView={{ 
                     opacity: 1,
@@ -298,56 +313,34 @@ const SkillsSection = () => {
 const ContactSection = () => {
     return (
         <Section>
-            <h2 className='text-5xl font-bold text-white'>Contact Me</h2>
-            <div className='mt-8 p-8 rounded-md bg-white w-96 max-w-full'>
-                <form>
-                    <label for="name" className='font-medium text-gray-900 block mb-1'>
-                        Name
-                    </label>
-                    <input
-                    type='text'
-                    name='name'
-                    id='name'
-                    className='block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-black-600'
-                    />
-                      <label for="email" className='font-medium text-gray-900 block mb-1'>
-                        Email
-                    </label>
-                    <input
-                    type='text'
-                    name='email'
-                    id='email'
-                    className='block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-black-600'
-                    />
-                      <label for="message" className='font-medium text-gray-900 block mb-1'>
-                        Message
-                    </label>
-                    <input
-                    type='text'
-                    name='message'
-                    id='message'
-                    className='block w-full h-52 rounded-md border-0 text-gray-200 shadow-sm ring-1 ring-inset ring-black-600'
-                    />
-                    <button className='bg-blue-600 rounded-lg text-white p-3 mt-5 font-bold text-2xl'>
-                        Submit
-                    </button>
-
-                </form>
+            <h2 className='pl-[32.5rem] text-7xl font-extrabold text-white text-center mb-8'>
+                Contact Me!
+            </h2>
+            <div className='p-11 rounded-xl bg-white bg-opacity-20 backdrop-filter backdrop-blur-md shadow-2xl w-full max-w-lg mx-auto border border-gray-300'> {/* Glassmorphism effect with max width */}
+                <p className='font-mono font-semibold text-2xl text-gray-200 text-center mb-6'>
+                    Feel free to reach out to me via email or phone!
+                </p>
+                <div className='mt-4'>
+                    <h3 className='font-bold text-2xl text-white flex items-center mb-2'>
+                        📬 Email:
+                    </h3>
+                    <a 
+                        href="mailto:gianluigilucca@gmail.com" 
+                        className='text-blue-400 underline hover:text-white transition-colors duration-200'
+                    >
+                        gianluigilucca@gmail.com
+                    </a>
+                </div>
+                <div className='mt-4'>
+                <h3 className=' font-bold text-2xl text-white flex items-center mb-2'>
+                    🤙🏼 Phone:
+                    </h3>
+                <p className='text-gray-200'>+39 3402568883</p>
+                </div>
             </div>
         </Section>
     )
 }
 
-export const Interface = () => {
-    return (
-        <>
-            <div className='flex flex-col items-center w-screen'>
-                <AboutSection />
-                <SkillsSection />
-                <ContactSection />
-            </div>
-        </>
-    );
-}
 
 

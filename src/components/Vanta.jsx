@@ -3,15 +3,13 @@ import React, { useEffect, useRef } from 'react';
 
 const VantaBackground = () => {
   const vantaRef = useRef(null);
-  const ringsRef = useRef(null); // Reference for the DOM element
+  const ringsRef = useRef(null);
 
   useEffect(() => {
-    // Check if Vanta is available in the global window object
     const VANTA = window.VANTA;
     if (VANTA && !vantaRef.current) {
-      // Initialize Vanta.js effect
       vantaRef.current = VANTA.RINGS({
-        el: ringsRef.current, // Attach to the ref
+        el: ringsRef.current,
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
@@ -19,9 +17,9 @@ const VantaBackground = () => {
         minWidth: 300,
         scale: 1.0,
         scaleMobile: 1.0,
-        backgroundColor: 0x000000, // Customize background color
-        color: 0xffc700, // Primary color
-        color2: 0x1a1a1a, // Secondary color
+        backgroundColor: '',
+        color: 0xffc700,
+        color2: 0x1a1a1a
       });
     }
   }, []);

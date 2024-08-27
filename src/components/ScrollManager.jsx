@@ -27,21 +27,34 @@ export const ScrollManager = (props) => {
         })
     }, [section])
 
-    useFrame(()=>{
-        if(isAnimating.current) {
+    useFrame(() => {
+        if (isAnimating.current) {
             lastScroll.current = data.scroll.current;
             return;
         }
-        
-        const curSection = Math.floor(data.scroll.current * data.pages); //Know current page
-        //console.log(curSection)
-        if(data.scroll.current > lastScroll.current && curSection === 0) {
-            onSectionChange(1)
+
+        const curSection = Math.floor(data.scroll.current * data.pages); // Current page
+
+        // Scroll Down: Section 0 to 1
+        if (data.scroll.current > lastScroll.current && curSection === 0 && data.scroll.current) {
+            onSectionChange(1);
         }
-        if(data.scroll.current < lastScroll.current && data.scroll.current < 1 / (data.pages - 1)) {
-            onSectionChange(0)
+
+        // Scroll Up: Section 1 to 0
+        if (data.scroll.current < lastScroll.current && curSection === 1 && data.scroll.current) {
+            onSectionChange(0);
         }
+
+        // Scroll Down: Section 1 to 2
+        if (data.scroll.current > lastScroll.current && curSection === 1 && data.scroll.current > (1 / (data.pages - 1))) {
+            onSectionChange(2);
+        }
+
+        // Scroll Up: Section 2 to 1
+    if (data.scroll.current < lastScroll.current && curSection === 2) {
+        onSectionChange(1);
+            }
+
         lastScroll.current = data.scroll.current;
-    })
-    return null
+    });
 }

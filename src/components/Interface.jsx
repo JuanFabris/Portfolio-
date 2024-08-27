@@ -6,6 +6,7 @@ import { useRef, useEffect } from 'react';
 
 //HTML COMPONENTS
 
+
 const Section = (props) => {
     const { children } = props;
 
@@ -138,7 +139,7 @@ const AboutSection = () => {
                     {name}
                 </span>
             </h1>
-            <motion.p className='text-lg text-gray-200 mt-4'
+            <motion.p className=' rounded text-xl text-white mt-3 font-mono font-semibold'
                 initial={{
                     opacity: 0,
                     y: 25
@@ -151,25 +152,35 @@ const AboutSection = () => {
                         delay: 1.3
                     }
                 }}>
-                I'm a junior web developer aiming to
-                <br />
-                become a Full Stack software engineer
+                I hold a degree in Criminology and a Master’s in Cybersecurity, <br/>followed by a six-month coding program and R&D experience at HFarm. <br/> Currently, I consider myself as a Frontend Developer and have recently <br/> started studying backend development to transition into a Full Stack Developer role.
             </motion.p>
-            <motion.button className='bg-blue-600 rounded-lg text-white p-3 mt-5 font-bold text-2xl'
-                initial={{
-                    opacity: 0,
-                    y: 20
-                }}
-                whileInView={{
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                        duration: 1,
-                        delay: 1.8
-                    }
-                }}>
-                Contact Me
-            </motion.button>
+            <motion.button
+  className="button2 bg-transparent rounded-lg text-white p-3 mt-5 font-bold text-2xl"
+  style={{
+    width: '11em',
+    height: '3.5em',
+    border: '2px ridge #149CEA',
+    outline: 'none',
+    position: 'relative',
+    fontSize: '18px',
+    cursor: 'pointer',
+  }}
+  initial={{
+    opacity: 0,
+    y: 20,
+  }}
+  whileInView={{
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1,
+      delay: 1.8,
+    },
+  }}
+>
+  Contact Me
+  
+</motion.button>
         </Section>
     );
 };

@@ -89,3 +89,94 @@
 h3:hover {
   color: #3B82F6; /* Change color on hover */
 }
+
+
+
+.navbar-container {
+  position: absolute; /* Positioning relative to the nearest positioned ancestor */
+  top: 53px; /* Adjust this value to control the distance from the top of the Canvas */
+  left: 50%; /* Center the Navbar horizontally */
+  transform: translateX(-50%); /* Centering adjustment */
+  z-index: 10; /* Ensure it is above the Canvas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.child {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+  transition: all 0.3s cubic-bezier(0.68, 0.85, 0.265, 1.85);
+  border-radius: 5px;
+  margin: 0 5px;
+  box-shadow: inset 1px 1px 2px #fff, 0 0 5px #4442;
+}
+
+.child:hover {
+  background-color: white;
+  background-position: -10px 100px, -100px 100px;
+  transform: perspective(2000px) rotateX(60deg) translateY(2px);
+}
+
+.child-1:hover {
+  box-shadow: 0px 10px 10px #1e90ff;
+}
+
+.child-2:hover {
+  box-shadow: 0px 10px 10px #ff00ff;
+  
+}
+
+/* .child-3:hover {
+  box-shadow: 0px 10px 10px green;
+} */
+
+.child-4:hover {
+  box-shadow: 0px 10px 10px #434e64;
+  background-color: black;
+}
+
+.button1 {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0.68, -0.85, 0.265, 1.55);
+}
+
+.button1 svg {
+  width: 100%;
+  height: 50%;
+}
+
+.child-1:hover > .button1 {
+  transform: translate3d(0px, 20px, 30px) perspective(80px) rotateX(-60deg)
+    translateY(1px) translateZ(10px);
+  box-shadow: inset 0px 0px 25px #1e90ff;
+}
+
+.child-2:hover > .button1 {
+  transform: translate3d(0px, 20px, 30px) perspective(80px) rotateX(-60deg)
+    translateY(1px) translateZ(10px);
+  box-shadow: inset 0px 0px 25px #ff00ff;
+}
+
+.child-4:hover > .button1 {
+  transform: translate3d(0px, 20px, 30px) perspective(80px) rotateX(-60deg)
+    translateY(1px) translateZ(10px);
+  box-shadow: inset 0px 0px 25px #434e64;
+}
+
+
+.button2:hover {
+    box-shadow: inset 0px 0px 25px #1479EA;
+    transition: 0.5s
+  }

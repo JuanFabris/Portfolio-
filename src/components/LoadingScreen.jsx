@@ -17,7 +17,7 @@ export const LoadingScreen = (props) => {
   return (
     <div
       className={`fixed top-0 left-0 w-full h-full z-50 transition-opacity duration-1000 pointer-events-none
-        flex items-center justify-center bg-gradient-to-br from-gray-800 to-blue-600
+        flex items-center justify-center bg-gradient-to-br from-gray-800 to-black
         ${started ? "opacity-0" : "opacity-100"}`}
     >
       <div className="relative flex flex-col items-center">
@@ -46,12 +46,6 @@ export const LoadingScreen = (props) => {
           </div>
         </div>
       </div>
-
-      {/* Background Animation */}
-      <div className="absolute inset-0 bg-cover bg-no-repeat bg-center" style={{
-        backgroundImage: 'url(https://www.transparenttextures.com/patterns/asfalt-dark.png)',
-        opacity: 0.3,
-      }} />
     </div>
   );
 };

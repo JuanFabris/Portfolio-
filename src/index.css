@@ -75,3 +75,17 @@
   display: inline-block;
   opacity: 0; /* Initially hidden for the animation */
 }
+
+
+/* Custom CSS for SkillsSection */
+.progress-bar {
+  transition: background-color 0.3s ease;
+}
+
+.progress-bar:hover {
+  background-color: rgba(75, 0, 130, 0.8); /* Darker on hover */
+}
+
+h3:hover {
+  color: #3B82F6; /* Change color on hover */
+}

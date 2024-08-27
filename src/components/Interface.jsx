@@ -34,7 +34,7 @@ const Section = (props) => {
 
 const AboutSection = () => {
     const nameRef = useRef(null);
-    const name = "Gianluigi Lucca Fabris"; // The name to reveal
+    const name = "Gianluigi Lucca Fabris";
 
     useEffect(() => {
         // Function to reveal the letters of the name
@@ -96,7 +96,7 @@ const AboutSection = () => {
 
         const createWordTween = (el, index) => {
             const letters = [...el.querySelectorAll(".letter")];
-            const delay = index * 0.18; // Delay based on word index
+            const delay = index * 0.18;
             return gsap.fromTo(
                 letters,
                 {
@@ -106,7 +106,7 @@ const AboutSection = () => {
                 {
                     opacity: 1,
                     xPercent: 0,
-                    ease: "power4.out",
+                    ease: "bounce",
                     duration: 1,
                     stagger: 0.1,
                     delay,
@@ -117,12 +117,11 @@ const AboutSection = () => {
         // Timeout to reveal the name after 1 second
         const timeoutId = setTimeout(() => {
             if (nameRef.current) {
-                nameRef.current.style.opacity = 1; // Make the name visible
-                revealTextEffect(nameRef.current); // Start the reveal effect
+                nameRef.current.style.opacity = 1;
+                revealTextEffect(nameRef.current);
             }
-        }, 1000); // 1000 milliseconds = 1 second
+        }, 1000);
 
-        // Clean up the timeout if the component unmounts
         return () => clearTimeout(timeoutId);
     }, []);
 
@@ -133,7 +132,7 @@ const AboutSection = () => {
                 <br />
                 <span 
                     ref={nameRef} 
-                    className='italic text-white opacity-0' // Initially hidden
+                    className='italic text-white opacity-0'
                     style={{ transition: 'opacity 0.5s ease-in' }} // Smooth transition for visibility
                 >
                     {name}
@@ -177,135 +176,113 @@ const AboutSection = () => {
 
 
 const Skills = [
-    {
-        title : "Threejs / 3RF",
-        level : 75
-    },
-    {
-        title : "React / React Native",
-        level : 80
-    },
-    {
-        title : "Tailwind CSS",
-        level : 70
-    },
-    {
-        title : "Javascript",
-        level : 80
-    },
-    {
-        title : "Node.js",
-        level : 60
-    }
-]
+    { title: "Three.js / 3RF", level: 75 },
+    { title: "React / React Native", level: 80 },
+    { title: "Tailwind CSS", level: 70 },
+    { title: "JavaScript", level: 80 },
+    { title: "Node.js", level: 60 }
+];
 
-const Lenguages = [
-    {
-        title : "Italian",
-        level : 100
-    },
-    {
-        title : "Spanish",
-        level : 100
-    },
-    {
-        title : "English",
-        level : 90
-    }
-]
+const Languages = [
+    { title: "Italian", level: 100 },
+    { title: "Spanish", level: 100 },
+    { title: "English", level: 90 }
+];
 
+// Function to determine the color based on the level
+const getColor = (level) => {
+    if (level < 40) return 'bg-red-600';
+    if (level < 70) return 'bg-yellow-500';
+    return 'bg-green-500';
+};
+
+
+const ProgressBar = ({ title, level, index }) => {
+    const barColor = getColor(level);
+
+    return (
+        <div className='relative w-80 group'>
+            <motion.h3 
+                className='text-xl font-bold text-gray-200 mb-2 group-hover:text-indigo-500 transition-colors duration-300'
+                initial={{ opacity: 0 }}
+                whileInView={{ 
+                    opacity: 1,
+                    transition: {
+                        duration: 1,
+                        delay: 0.5 + index * 0.2
+                    }
+                }}
+            >
+                {title}
+            </motion.h3>
+            <div className='h-2 w-full bg-gray-300 rounded-full shadow-lg'>
+                <motion.div 
+                    className={`h-full ${barColor} rounded-full transition-all duration-300 ease-in-out`} 
+                    style={{ width: `${level}%` }}
+                    initial={{ scaleX: 0, originX: 0 }}
+                    whileInView={{ 
+                        scaleX: 1,
+                        transition: {
+                            duration: 1,
+                            delay: 0.5 + index * 0.2
+                        }
+                    }}
+                />
+            </div>
+            <motion.div
+                className="absolute left-0 text-white font-bold text-sm mt-1"
+                initial={{ opacity: 0 }}
+                whileInView={{ 
+                    opacity: 1,
+                    transition: {
+                        duration: 0.5,
+                        delay: 0.8 + index * 0.2
+                    }
+                }}
+                style={{ left: `${level}%`, transform: 'translateX(-50%)' }}
+            >
+                
+            </motion.div>
+        </div>
+    );
+};
+
+// SkillsSection Component
 const SkillsSection = () => {
     return (
         <Section>
-            
-          <motion.div whileInView={"visible"}>
-                <h2 className='text-5xl font-bold  text-gray-200'>Skills</h2>
-                <div className='mt-8 space-y-4'>
-                    {Skills.map((skill, index) => 
-                        <div className='w-64' key={index}>
-                            <motion.h3 className='text-xl font-bold text-gray-200'
-                            initial = {{
-                                opacity : 0,
-                            }}
-                            variants={{
-                                visible : {
-                                    opacity : 1,
-                                    transition : {
-                                        duration : 1,
-                                        delay : 0.5 + index * 0.2
-                                    }
-                                }
-                            }}
-                            >{skill.title}</motion.h3>
-                            <div className='h-2 w-full bg-gray-200 rounded-full mt-2'>
-                                <motion.div className='h-full bg-indigo-500 rounded-full border-x-black' 
-                                     style={{ width: `${skill.level}%` }}
-                                    initial = {{
-                                        scaleX : 0,
-                                        originX : 0
-                                    }}
-                                    variants={{
-                                        visible : {
-                                            scaleX : 1,
-                                            transition : {
-                                                duration : 1,
-                                                delay : 0.5 + index * 0.2
-                                            }
-                                        }
-                                    }}
-                                    >
-                                </motion.div>
-                            </div>
-                        </div>
-                    )}
+            <motion.div whileInView={"visible"}>
+                <h2 className='text-5xl font-bold text-gray-200 border-b-4 border-white pb-2'>Skills</h2>
+                <div className='mt-8 space-y-6'>
+                    {Skills.map((skill, index) => (
+                        <ProgressBar 
+                            key={index} 
+                            title={skill.title} 
+                            level={skill.level} 
+                            index={index} 
+                        />
+                    ))}
                 </div>
             </motion.div>
-          <motion.div whileInView={'visible'}>
-                <h2 className='text-5xl font-bold mt-16  text-gray-200'>Lenguages</h2>
-                <div className='mt-8 space-y-4'>
-                    {Lenguages.map((lenguage, index) => 
-                        <div className='w-64' key={index}>
-                            <motion.h3 className='text-xl font-bold text-gray-200'
-                            initial = {{
-                                opacity : 0,
-                            }}
-                            variants={{
-                                visible : {
-                                    opacity : 1,
-                                    transition : {
-                                        duration : 1,
-                                        delay : 0.5 + index * 0.2
-                                    }
-                                }
-                               
-                            }}
-                            >{lenguage.title}</motion.h3>
-                            <div className='h-2 w-full bg-gray-200 rounded-full mt-2'>
-                                <motion.div className='h-full bg-indigo-500 rounded-full' 
-                                    style={{ width: `${lenguage.level}%` }}
-                                    initial = {{
-                                        scaleX : 0,
-                                        originX : 0
-                                    }}
-                                    variants={{
-                                        visible : {
-                                            scaleX : 1,
-                                            transition : {
-                                                duration : 1,
-                                                delay : 0.5 + index * 0.2
-                                            }
-                                        }
-                                    }}
-                                >
-                                </motion.div>
-                            </div>
-                        </div>
-                    )}
+            <motion.div whileInView={'visible'}>
+                <h2 className='text-5xl font-bold mt-16 text-gray-200 border-b-4 border-white pb-2'>Languages</h2>
+                <div className='mt-8 space-y-6'>
+                    {Languages.map((language, index) => (
+                        <ProgressBar 
+                            key={index} 
+                            title={language.title} 
+                            level={language.level} 
+                            index={index} 
+                        />
+                    ))}
                 </div>
             </motion.div>
         </Section>
-    )
-}
+    );
+};
+
+
+
 
 const ContactSection = () => {
     return (

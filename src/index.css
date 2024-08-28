@@ -183,3 +183,11 @@ h3:hover {
     box-shadow: inset 0px 0px 25px #1479EA;
     transition: 0.5s
   }
+
+
+
+  @media (max-width: 768px) {
+    .navbar-container .child {
+      display: none;
+    }
+  }

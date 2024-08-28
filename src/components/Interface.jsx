@@ -312,13 +312,16 @@ const SkillsSection = () => {
         };
     }, []);
 
+    const headingSize = isMobile ? '2xl' : '6xl';
+    const barMarginTop = isMobile ? 'mt-4' : 'mt-8';
+    const barSpaceY = isMobile ? 'space-y-2' : 'space-y-6';
     return (
         <Section>
             <motion.div whileInView={"visible"}>
-                <h2 className={`text-${isMobile ? '2xl' : '5xl'} font-bold text-gray-200 border-b-4 border-white pb-2`}>
+                <h2 className={`text-${headingSize} font-bold text-gray-200 border-b-4 border-white pb-2`}>
                     Skills
                 </h2>
-                <div className={`${isMobile ? 'text-sm mt-4 space-y-2' : 'text-sm mt-8 space-y-6'}`}>
+                <div className={`text-sm ${barMarginTop} ${barSpaceY}`}>
                     {Skills.map((skill, index) => (
                         <ProgressBar 
                             key={index} 
@@ -330,10 +333,10 @@ const SkillsSection = () => {
                 </div>
             </motion.div>
             <motion.div whileInView={'visible'}>
-                <h2 className={`text-${isMobile ? '2xl' : '5xl'} font-bold mt-16 text-gray-200 border-b-4 border-white pb-2`}>
+                <h2 className={`text-${headingSize} font-bold mt-16 text-gray-200 border-b-4 border-white pb-2`}>
                     Languages
                 </h2>
-                <div className={`${isMobile ? 'text-sm mt-4 space-y-2' : 'text-sm mt-8 space-y-6'}`}>
+                <div className={`text-sm ${barMarginTop} ${barSpaceY}`}>
                     {Languages.map((language, index) => (
                         <ProgressBar 
                             key={index} 
@@ -347,6 +350,7 @@ const SkillsSection = () => {
         </Section>
     );
 };
+
 
 
 

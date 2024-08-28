@@ -1,5 +1,22 @@
+import { useState, useEffect } from "react";
+
+
 export const Menu = (props) => {
     const { onSectionChange, menuOpened, setMenuOpened } = props;
+    
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+      const handleResize = () => {
+          setIsMobile(window.innerWidth <= 768); // Update on resize
+      };
+
+      window.addEventListener('resize', handleResize);
+
+      return () => {
+          window.removeEventListener('resize', handleResize);
+      };
+  }, []);
   
     return (
       <>
@@ -26,7 +43,7 @@ export const Menu = (props) => {
         </button>
         <div
           className={`z-10 fixed top-0 right-0 bottom-0 bg-gray-900 transition-all overflow-hidden flex flex-col
-        ${menuOpened ? "w-80" : "w-0"}`}
+        ${menuOpened ? (isMobile ? "w-60" : "w-80") : "w-0"}`}
         >
         <div className="flex-1 flex items-start justify-center flex-col gap-6 p-10">
           <div className="navbar-container">
@@ -89,7 +106,7 @@ export const Menu = (props) => {
     return (
       <button
         onClick={onClick}
-        className="text-2xl font-bold text-white cursor-pointer hover:text-indigo-600 transition-colors"
+        className="text-2xl font-bold text-white cursor-pointer hover:animate-shake transition-colors"
       >
         {label}
       </button>

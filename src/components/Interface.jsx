@@ -2,7 +2,7 @@ import React from 'react'
 import {motion} from 'framer-motion'
 import { Avatar } from './Avatar';
 import gsap from "https://cdn.skypack.dev/gsap@3.5.1";
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 //HTML COMPONENTS
 
@@ -48,8 +48,22 @@ export const Interface = (props) => {
 
 const AboutSection = (props) => {
     const { setSection } = props;
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Initial state based on screen width
     const nameRef = useRef(null);
     const name = "Gianluigi Lucca Fabris";
+
+    useEffect(() => {
+        // Update isMobile state on window resize
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         // Function to reveal the letters of the name
@@ -153,7 +167,7 @@ const AboutSection = (props) => {
                     {name}
                 </span>
             </h1>
-            <motion.p className=' rounded text-xl text-white mt-3 font-mono font-semibold'
+            <motion.p className='rounded text-xl text-white mt-3 font-mono font-semibold'
                 initial={{
                     opacity: 0,
                     y: 25
@@ -166,40 +180,49 @@ const AboutSection = (props) => {
                         delay: 1.3
                     }
                 }}>
-                I hold a degree in Criminology and a Master’s in Cybersecurity, <br/>followed by a six-month coding program and R&D experience at HFarm. <br/> Currently, I consider myself as a Frontend Developer and have recently <br/> started studying backend development to transition into a Full Stack Developer role.
+                {isMobile ? (
+                    <>
+                        I am a Frontend Developer and have recently started studying backend development to transition into a Full Stack Developer role.
+                    </>
+                ) : (
+                    <>
+                        I hold a degree in Criminology and a Master’s in Cybersecurity, <br />
+                        followed by a six-month coding program and R&D experience at HFarm. <br />
+                        Currently, I consider myself as a Frontend Developer and have recently <br />
+                        started studying backend development to transition into a Full Stack Developer role.
+                    </>
+                )}
             </motion.p>
             <motion.button
-            onClick={() => setSection(2)}
-  className="button2 bg-transparent rounded-lg text-white p-3 mt-5 font-bold text-2xl"
-  style={{
-    width: '11em',
-    height: '3.5em',
-    border: '2px ridge #149CEA',
-    outline: 'none',
-    position: 'relative',
-    fontSize: '18px',
-    cursor: 'pointer',
-  }}
-  initial={{
-    opacity: 0,
-    y: 20,
-  }}
-  whileInView={{
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1,
-      delay: 1.8,
-    },
-  }}
->
-  Contact Me
-  
-</motion.button>
+                onClick={() => setSection(2)}
+                className="button2 bg-transparent rounded-lg text-white p-3 mt-5 font-bold text-2xl"
+                style={{
+                    width: '11em',
+                    height: '3.5em',
+                    border: '2px ridge #149CEA',
+                    outline: 'none',
+                    position: 'relative',
+                    fontSize: '18px',
+                    cursor: 'pointer',
+                }}
+                initial={{
+                    opacity: 0,
+                    y: 20,
+                }}
+                whileInView={{
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                        duration: 1,
+                        delay: 1.8,
+                    },
+                }}
+            >
+                Contact Me
+            </motion.button>
         </Section>
     );
 };
-
 
 const Skills = [
     { title: "Three.js / 3RF", level: 75 },
@@ -326,7 +349,7 @@ const ContactSection = () => {
                     </h3>
                     <a 
                         href="mailto:gianluigilucca@gmail.com" 
-                        className='text-blue-400 underline hover:text-white transition-colors duration-200'
+                        className='text-blue-400 underline hover:text-white transition-colors duration-200 font-semibold'
                     >
                         gianluigilucca@gmail.com
                     </a>
@@ -335,7 +358,7 @@ const ContactSection = () => {
                 <h3 className=' font-bold text-2xl text-white flex items-center mb-2'>
                     🤙🏼 Phone:
                     </h3>
-                <p className='text-gray-200'>+39 3402568883</p>
+                <p className='text-gray-200 font-semibold'>+39 3402568883</p>
                 </div>
             </div>
         </Section>

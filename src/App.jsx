@@ -8,7 +8,7 @@ import { Menu } from "./components/Menu";
 import { MotionConfig } from "framer-motion";
 import VantaBackground from "./components/Vanta"; // Import Vanta Background
 import { LoadingScreen } from "./components/LoadingScreen";
-import {Navbar} from "./components/Navbar";
+//import {Navbar} from "./components/Navbar";
 
 function App() {
   const [section, setSection] = useState(0);
@@ -28,11 +28,11 @@ function App() {
           mass: 5,
           stiffness: 500,
           damping: 50,
-          restDelta: 0.00002,
+          restDelta: 0.0001,
         }}
       >
         <VantaBackground />
-        <Navbar/>
+        {/* <Navbar/> */}
         <Canvas shadows camera={{ position: [0, 100, 600], fov: 30 }}>
           <ScrollControls pages={3} damping={0.1}>
             <ScrollManager section={section} onSectionChange={setSection} />

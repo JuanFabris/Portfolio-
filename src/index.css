@@ -96,7 +96,7 @@ h3:hover {
 
 .navbar-container {
   position: absolute; /* Positioning relative to the nearest positioned ancestor */
-  top: 53px; /* Adjust this value to control the distance from the top of the Canvas */
+  top: 150px; /* Adjust this value to control the distance from the top of the Canvas */
   left: 50%; /* Center the Navbar horizontally */
   transform: translateX(-50%); /* Centering adjustment */
   z-index: 10; /* Ensure it is above the Canvas */
@@ -115,8 +115,9 @@ h3:hover {
   transform-style: preserve-3d;
   transition: all 0.3s cubic-bezier(0.68, 0.85, 0.265, 1.85);
   border-radius: 5px;
-  margin: 0 5px;
-  box-shadow: inset 1px 1px 2px #fff, 0 0 5px #4442;
+  margin: 7px;
+  box-shadow: inset 1px 1px 2px #fff, 1px 1px 5px #4442;
+  background-color: black;
 }
 
 .child:hover {

@@ -35,6 +35,7 @@ const Section = (props) => {
 
 export const Interface = (props) => {
     const { setSection } = props;
+
     return (
         <>
             <div className='flex flex-col items-center w-screen'>
@@ -298,11 +299,26 @@ const ProgressBar = ({ title, level, index }) => {
 
 // SkillsSection Component
 const SkillsSection = () => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Initial state based on screen width
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     return (
         <Section>
             <motion.div whileInView={"visible"}>
-                <h2 className='text-5xl font-bold text-gray-200 border-b-4 border-white pb-2'>Skills</h2>
-                <div className='mt-8 space-y-6'>
+                <h2 className={`text-${isMobile ? '2xl' : '5xl'} font-bold text-gray-200 border-b-4 border-white pb-2`}>
+                    Skills
+                </h2>
+                <div className={`${isMobile ? 'text-sm mt-4 space-y-2' : 'text-sm mt-8 space-y-6'}`}>
                     {Skills.map((skill, index) => (
                         <ProgressBar 
                             key={index} 
@@ -314,8 +330,10 @@ const SkillsSection = () => {
                 </div>
             </motion.div>
             <motion.div whileInView={'visible'}>
-                <h2 className='text-5xl font-bold mt-16 text-gray-200 border-b-4 border-white pb-2'>Languages</h2>
-                <div className='mt-8 space-y-6'>
+                <h2 className={`text-${isMobile ? '2xl' : '5xl'} font-bold mt-16 text-gray-200 border-b-4 border-white pb-2`}>
+                    Languages
+                </h2>
+                <div className={`${isMobile ? 'text-sm mt-4 space-y-2' : 'text-sm mt-8 space-y-6'}`}>
                     {Languages.map((language, index) => (
                         <ProgressBar 
                             key={index} 
@@ -329,7 +347,6 @@ const SkillsSection = () => {
         </Section>
     );
 };
-
 
 
 

@@ -2,15 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Avatar } from "./Avatar"; 
 import { Office } from "./Office"; 
 import { motion } from 'framer-motion-3d';
-import * as THREE from 'three';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 
 export const Experience = (props) => {
     const { section } = props; 
     const avatarRef = useRef(); 
     const [animation, setAnimation] = useState("Type");
-    const [avatarPosition, setAvatarPosition] = useState([10, 5, -50]);
+    const [avatarPosition, setAvatarPosition] = useState(new THREE.Vector3(10, 5, -50));
     const [rotation, setRotation] = useState([0, 0, 0]);
-    const targetPosition = useRef([-80, -320, -50]);
+    const targetPosition = useRef(new THREE.Vector3(-80, -320, -50));
     const animationTriggered = useRef(false);
 
     useEffect(() => {
@@ -22,44 +24,41 @@ export const Experience = (props) => {
         } else if (section === 0) {
             setAnimation("Type");
             setRotation([0, 0, 0]);
-            setAvatarPosition([10, 5, -50]);
+            resetAvatarPosition();
             animationTriggered.current = false;
         }
     }, [section]);
-    
+
     const moveAvatarToTarget = () => {
-        const startPosition = new THREE.Vector3(...avatarPosition);
-        const endPosition = new THREE.Vector3(...targetPosition.current);
-        const duration = 0.1;
-        const startTime = performance.now();
-    
-        const easeOutQuad = (t) => t * (2 - t); //easing function
-    
-        const animate = (time) => {
-            const elapsed = (time - startTime) / 1000;
-            const progress = Math.min(elapsed / duration, 1);
-    
-            //apply ease
-            const easedProgress = easeOutQuad(progress);
-    
-            // Calculate current position
-            const currentPosition = startPosition.lerp(endPosition, easedProgress);
-            setAvatarPosition(currentPosition.toArray());
-    
-            // Continue the animation until it reaches the end
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            }
-        };
-    
-        // Start the movement animation
-        requestAnimationFrame(animate);
+        gsap.to(avatarPosition, {
+            duration: 0.1,
+            x: targetPosition.current.x,
+            y: targetPosition.current.y,
+            z: targetPosition.current.z,
+            ease: "power4.inOut",
+            onUpdate: () => {
+                setAvatarPosition(avatarPosition.clone());
+            },
+            onComplete: handleAnimationEnd
+        });
     };
-    
+
+    const resetAvatarPosition = () => {
+        gsap.to(avatarPosition, {
+            duration: 0.1,
+            x: 10,
+            y: 5,
+            z: -50,
+            ease: "power4.inOut",
+            onUpdate: () => {
+                setAvatarPosition(avatarPosition.clone());
+            }
+        });
+    };
+
     const handleAnimationEnd = () => {
         console.log("Animation ended.");
     };
-    
 
     return (
         <>
@@ -73,10 +72,10 @@ export const Experience = (props) => {
                 <Office />
                 <Avatar
                     ref={avatarRef}
-                    position={avatarPosition}
+                    position={avatarPosition.toArray()}
                     scale={[55, 55, 55]} 
                     rotation={rotation} 
-                    animation={animation} // Fixed typo here
+                    animation={animation}
                     onAnimationEnd={handleAnimationEnd}
                 />
             </motion.group>

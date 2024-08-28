@@ -92,6 +92,10 @@ h3:hover {
   transition : 0.5s
 }
 
+h1:hover {
+  font-size: 100px;
+}
+
 
 
 .navbar-container {

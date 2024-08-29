@@ -315,6 +315,7 @@ const SkillsSection = () => {
     const headingSize = isMobile ? '2xl' : '6xl';
     const barMarginTop = isMobile ? 'mt-4' : 'mt-8';
     const barSpaceY = isMobile ? 'space-y-2' : 'space-y-6';
+    
     return (
         <Section>
             <motion.div whileInView={"visible"}>

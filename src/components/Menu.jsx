@@ -48,7 +48,7 @@ export const Menu = (props) => {
         <div className="flex-1 flex items-start justify-center flex-col gap-6 p-10">
           <div className="navbar-container">
         <div className="child child-1">
-          <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.linkedin.com/in/gianluigi-lucca-fabris-b42385237" target="_blank" rel="noopener noreferrer">
             <button className="button1 btn-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

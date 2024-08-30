@@ -62,7 +62,7 @@ export const Menu = (props) => {
           </a>
         </div>
         <div className="child child-2">
-          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.instagram.com/gianluigi_lucca_fabris/" target="_blank" rel="noopener noreferrer">
             <button className="button1 btn-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,7 @@ export const Menu = (props) => {
           </a>
         </div>
         <div className="child child-4">
-          <a href="https://www.github.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/JuanFabris" target="_blank" rel="noopener noreferrer">
             <button className="button1 btn-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

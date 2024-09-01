@@ -363,7 +363,7 @@ const ContactSection = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const headingSize = isMobile ? 'text-4xl' : "6xl";
+    const headingSize = isMobile ? 'text-4xl' : "text-7xl";
     const panelSize =  isMobile ? "w-96" : "w-full"
 
     return (

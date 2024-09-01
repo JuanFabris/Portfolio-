@@ -33,24 +33,24 @@ export const ScrollManager = (props) => {
             return;
         }
 
-        const curSection = Math.floor(data.scroll.current * data.pages); // Current page
+        const curSection = Math.floor(data.scroll.current * data.pages); // Current section
 
-        // Scroll Down: Section 0 to 1
+        // Section 0 to 1
         if (data.scroll.current > lastScroll.current && curSection === 0 && data.scroll.current) {
             onSectionChange(1);
         }
 
-        // Scroll Up: Section 1 to 0
+        // Section 1 to 0
         if (data.scroll.current < lastScroll.current && curSection === 1 && data.scroll.current) {
             onSectionChange(0);
         }
 
-        // Scroll Down: Section 1 to 2
+        // Section 1 to 2
         if (data.scroll.current > lastScroll.current && curSection === 1 && data.scroll.current > (1 / (data.pages - 1))) {
             onSectionChange(2);
         }
 
-        // Scroll Up: Section 2 to 1
+        // Section 2 to 1
     if (data.scroll.current < lastScroll.current && curSection === 2) {
         onSectionChange(1);
             }

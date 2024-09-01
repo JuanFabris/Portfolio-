@@ -6,7 +6,6 @@ import { useRef, useEffect, useState } from 'react';
 
 //HTML COMPONENTS
 
-
 const Section = (props) => {
     const { children } = props;
 
@@ -67,7 +66,7 @@ const AboutSection = (props) => {
     }, []);
 
     useEffect(() => {
-        // Function to reveal the letters of the name
+        // Effetto rivelazione lettere
         const revealTextEffect = (el) => {
             const textElements = createTextElements(el.textContent);
             setInnerElements(el, textElements);
@@ -144,7 +143,7 @@ const AboutSection = (props) => {
             );
         };
 
-        // Timeout to reveal the name after 1 second
+        // Timeout nome 1 secondo
         const timeoutId = setTimeout(() => {
             if (nameRef.current) {
                 nameRef.current.style.opacity = 1;
@@ -239,7 +238,7 @@ const Languages = [
     { title: "English", level: 90 }
 ];
 
-// Function to determine the color based on the level
+// colore in base al livello
 const getColor = (level) => {
     if (level < 40) return 'bg-red-600';
     if (level < 70) return 'bg-yellow-500';
@@ -364,7 +363,7 @@ const ContactSection = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const headingSize = isMobile ? 'text-2xl' : "6xl";
+    const headingSize = isMobile ? 'text-4xl' : "6xl";
     const panelSize =  isMobile ? "w-96" : "w-full"
 
     return (

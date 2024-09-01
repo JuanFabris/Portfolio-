@@ -37,7 +37,7 @@ export const LoadingScreen = (props) => {
           <div className="opacity-30 animate-flicker">WELCOME</div>
         </div>
 
-        {/* Animated Circular Loader */}
+      {/* cerchio */}
         <div className="mt-10">
           <div className="loader">
             <div className="circle" />

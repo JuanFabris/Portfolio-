@@ -4,7 +4,7 @@ import { Office } from "./Office";
 import { motion } from 'framer-motion-3d';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import * as THREE from 'three'; // Import THREE here if needed for Vector3
+import * as THREE from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,9 +14,9 @@ export const Experience = (props) => {
     const [animation, setAnimation] = useState("Type");
     const [avatarPosition, setAvatarPosition] = useState(new THREE.Vector3(10, 5, -50));
     const [rotation, setRotation] = useState([0, 0, 0]);
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Initial state based on screen width
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const targetPosition = useRef(new THREE.Vector3(-80, -320, -50));
-    const mobileTargetPosition = useRef(new THREE.Vector3(-40, -350, -50)); // Adjusted for mobile
+    const mobileTargetPosition = useRef(new THREE.Vector3(-40, -350, -50)); // posizione per telefono
     const animationTriggered = useRef(false);
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export const Experience = (props) => {
     useEffect(() => {
         if (section === 1 && !animationTriggered.current) {
             if (isMobile) {
-                setAnimation("Land"); // Mobile-specific animation
+                setAnimation("Land"); // cambio animazione all'occorrenza 
                 moveAvatarToTarget(mobileTargetPosition.current);
                 setRotation([0, 10, 0]);
             } else {
@@ -44,7 +44,7 @@ export const Experience = (props) => {
             setRotation([0, 3.2, 0]);
             animationTriggered.current = true;
         } else if (section === 0) {
-            setAnimation("Type");
+            setAnimation("Type"); // Default
             setRotation([0, 0, 0]);
             resetAvatarPosition();
             animationTriggered.current = false;
@@ -61,7 +61,9 @@ export const Experience = (props) => {
             onUpdate: () => {
                 setAvatarPosition(avatarPosition.clone());
             },
-            onComplete: handleAnimationEnd
+            onComplete: () =>  {
+                handleAnimationEnd
+            }
         });
     };
 

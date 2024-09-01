@@ -68,7 +68,7 @@ body {
 }
 
 .progress-bar:hover {
-  background-color: rgba(75, 0, 130, 0.8); /* Darker on hover */
+  background-color: rgba(75, 0, 130, 0.8);
 }
 
 h3:hover {
@@ -77,13 +77,13 @@ h3:hover {
   transition: 0.5s;
 }
 
-/* Navbar Styles */
+/* Navbar */
 .navbar-container {
   position: absolute;
-  top: 150px; /* Distance from the top of the canvas */
-  left: 50%; /* Center the navbar horizontally */
-  transform: translateX(-50%); /* Centering adjustment */
-  z-index: 10; /* Ensure it's above the canvas */
+  top: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -109,7 +109,7 @@ h3:hover {
   transform: perspective(2000px) rotateX(60deg) translateY(2px);
 }
 
-/* Specific Child Hover Effects */
+/* Child Hover Effects */
 .child-1:hover {
   box-shadow: 0px 10px 10px #1e90ff;
 }
@@ -157,13 +157,11 @@ h3:hover {
   box-shadow: inset 0px 0px 25px #434e64;
 }
 
-/* Additional Button Hover Effects */
 .button2:hover {
   box-shadow: inset 0px 0px 25px #1479EA;
   transition: 0.5s;
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
   .navbar-container .child {
     display: none;

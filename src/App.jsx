@@ -6,9 +6,9 @@ import { useState, useEffect } from "react";
 import { ScrollManager } from "./components/ScrollManager";
 import { Menu } from "./components/Menu";
 import { MotionConfig } from "framer-motion";
-import VantaBackground from "./components/Vanta"; // Import Vanta Background
+import VantaBackground from "./components/Vanta";
 import { LoadingScreen } from "./components/LoadingScreen";
-//import {Navbar} from "./components/Navbar";
+//import {Navbar} from "./components/Navbar"; Non in uso
 
 function App() {
   const [section, setSection] = useState(0);

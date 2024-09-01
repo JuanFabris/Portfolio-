@@ -364,15 +364,15 @@ const ContactSection = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const headingSize = isMobile ? '2xl' : "6xl";
-    const panelSize =  isMobile ? "96" : "full"
+    const headingSize = isMobile ? 'text-2xl' : "6xl";
+    const panelSize =  isMobile ? "w-96" : "w-full"
 
     return (
         <section className="flex flex-col items-center justify-center h-screen">
-            <h2 className={`text-${headingSize} font-extrabold text-white text-center mb-8`}>
+            <h2 className={`${headingSize} font-extrabold text-white text-center mb-8`}>
                 Contact Me!
             </h2>
-            <div className={`p-11 rounded-xl bg-white bg-opacity-20 backdrop-filter backdrop-blur-md shadow-2xl w-${panelSize} max-w-lg mx-auto border border-gray-300`}>
+            <div className={`p-11 rounded-xl bg-white bg-opacity-20 backdrop-filter backdrop-blur-md shadow-2xl ${panelSize} max-w-lg mx-auto border border-gray-300`}>
                 <p className='font-mono font-semibold text-2xl text-gray-200 text-center mb-6'>
                     Feel free to reach out to me via email or phone!
                 </p>
@@ -384,12 +384,12 @@ const ContactSection = () => {
                         href="mailto:gianluigilucca@gmail.com" 
                         className='text-blue-400 underline hover:text-white transition-colors duration-200 font-semibold'
                     >
-                        ☎️ gianluigilucca@gmail.com
+                        gianluigilucca@gmail.com
                     </a>
                 </div>
                 <div className='mt-4'>
                     <h3 className='font-bold text-2xl text-white flex items-center mb-2'>
-                         Phone:
+                        ☎️ Phone:
                     </h3>
                     <p className='text-gray-200 font-semibold'>+39 3402568883</p>
                 </div>

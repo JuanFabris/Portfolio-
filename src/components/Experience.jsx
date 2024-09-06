@@ -36,7 +36,7 @@ export const Experience = (props) => {
             if (isMobile) {
                 setAnimation("Land"); // cambio animazione all'occorrenza 
                 moveAvatarToTarget(mobileTargetPosition.current);
-                setRotation([0, 10, 0]);
+                setRotation([0, 9, 0]);
             } else {
                 setAnimation("Land");
                 moveAvatarToTarget(targetPosition.current);
